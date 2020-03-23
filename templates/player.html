@@ -1,0 +1,129 @@
+<html>
+    <head>
+        <title style="color:white">THIS IS THE GAME</title>
+    </head>
+    <body onload = "JavaScript:AutoRefresh(5000);">
+        <h1 style="color:white">Hi, {{ player.name }}! </h1>
+
+        {% if player.is_zar %}
+        	<p>You are the zar, wait for the other to play</p>
+        {% elif player.has_played %}
+        	<p>Waiting for other to play</p>
+        {% else %}
+        	<p>You are playing.</p>
+        {% endif %}
+
+
+        <p>These are your cards</p>
+
+        {% if player.has_played %}
+		
+			{% for card in player_hand %}
+	        <div>
+	        	<a href = "{{request.url}}" class="btn" >
+	        		{{card.card_text}}
+	        	</a>
+	        </div>
+        	{% endfor %}
+
+		{% else %}
+			{% for card in player_hand %}
+	        <div>
+	        	<a href = "{{request.url}}/{{card.card_id}}" class="btn" >
+	        		{{card.card_text}}
+	        	</a>
+	        </div>
+	    	
+        {% endfor %}
+		{% endif %}
+
+       
+        <hr>
+        {% if turn_complete %}
+        	<p>Everybody played. Card on the table. </p>
+        	{% if player.is_zar %}
+				<p>ZAR click on the winner</p>
+				{% for card in played_card%}
+			        <div>
+			        	<a href = "{{request.url}}/declare_winner/{{card.player_id}}" class="btn" >
+			        		{{card.card_text}}
+			        	</a>
+			        </div>
+        	{% endfor %}
+
+			{% else %}
+				<p>{{player.is_zar}}</p>
+				{% for card in played_card%}
+			        <div>
+			        	<a href = "{{request.url}}" class="btn" >
+			        		{{card.card_text}}
+			        	</a>
+			        </div>
+        	{% endfor %}
+			{% endif %}
+
+        {% else %}
+        	{% for card in played_card %}
+		        {% if card.is_zar %}
+		        	<p>The black card on the table: {{card.card_text}}</p>
+		        {% else %}
+			       	<p>
+			       		<p>{{card.name}} played</p>
+			       	</p>
+		        {% endif %}
+
+        	{% endfor %}
+
+        {% endif%}
+
+        
+        <hr>
+
+        
+    </body>
+</html>
+
+<style type="text/css">
+	
+	body {
+		background-color: rgb(0, 0, 0);
+	}
+	p
+	{
+		color: rgb(255,255,255);
+	}
+	/*
+	.btn {
+	  border: 2px solid black;
+	  background-color: white;
+	  color: black;
+	  padding: 14px 28px;
+	  padding-top: 14px;
+	  font-size: 16px;
+	  cursor: pointer;
+	}
+	*/
+
+	.btn {
+         background-color: white;
+         border: none;
+         color: black;
+         padding: 14px 28px;
+	  	padding-top: 14px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+         font-size: 20px;
+         margin: 4px 2px;
+         cursor: pointer;
+         }
+
+</style>
+
+<script type = "text/JavaScript">
+         <!--
+            function AutoRefresh( t ) {
+               setTimeout("location.reload(true);", t);
+            }
+         //-->
+</script>
