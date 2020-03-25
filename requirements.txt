@@ -1,7 +1,7 @@
 Flask
 Werkzeug
 WTForms
-uuid
+
 random
 # requirements for Heroku
 psycopg2
