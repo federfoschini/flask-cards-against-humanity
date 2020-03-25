@@ -2,7 +2,6 @@ Flask
 Werkzeug
 WTForms
 
-random
 # requirements for Heroku
 psycopg2
 gunicorn
