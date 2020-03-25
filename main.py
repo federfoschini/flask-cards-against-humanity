@@ -218,5 +218,5 @@ def player_player_id_declare_winner_winner_id(player_id,winner_id):
 	
 if __name__ == "__main__":
 
-	#app.run(host = '192.168.137.1',port = 5000,debug = True)
+	
 	app.run()
