@@ -1,4 +1,4 @@
-from flask import Flask,render_template,jsonify, redirect
+from flask import Flask,render_template,jsonify, redirect, request
 from init_methods import init_game
 from init_methods import init_next_turn
 from utils import connect
@@ -25,6 +25,16 @@ def get_player(cursor, player_id):
 	    player = {col_name:col_value for col_name,col_value in zip(columns_player,row[0])}
 
 	return player
+def get_players_table(cursor):
+	query = """
+	SELECT  player_id, name, is_zar, has_played, score
+	FROM player
+	"""
+	cursor.execute(query)
+	columns_player = ['player_id', 'name', 'is_zar', 'has_played', 'score']
+	rows = cursor.fetchall()
+	players = [{key:val for key,val in zip(columns_player,row)} for row in rows]
+	return players
 
 def get_player_hand(cursor,player_id):
 
@@ -97,6 +107,23 @@ def player():
 def test():
     return render_template('test.html')
 
+@app.route('/init_page')
+def init_page():
+	with connect() as conn, conn.cursor() as cursor:
+		players_list = get_players_table(cursor)
+
+	return render_template('init_page.html',players_list = players_list)
+
+@app.route('/init_page', methods=['POST'])
+def init_games_method():
+	name_string = request.form['text']
+	names = name_string.split(',')
+	init_game(names,num_cards_to_draw=10)
+	with connect() as conn, conn.cursor() as cursor:
+		players_list = get_players_table(cursor)	
+
+	return render_template('init_page.html',players_list = players_list)
+
 
 @app.route("/player/<player_id>")
 def player_player_id(player_id):
@@ -108,12 +135,14 @@ def player_player_id(player_id):
 		player = get_player(cursor, player_id)
 		player_hand = get_player_hand(cursor,player_id)
 		played_card = get_played_card(cursor)
+		players_list = get_players_table(cursor)	
 
 	if len(played_card) < num_player: 
 
 		return render_template('player.html',
 								player = player,
 								player_hand = player_hand,
+								players_list = players_list,
 								turn_complete = turn_complete,
 								played_card = played_card )
 
@@ -127,13 +156,12 @@ def player_player_id(player_id):
 		        updated_card['player_id'] = card['player_id']
 		        updated_card['name'] = card['name']
 		        updated_card['card_text'] = combine_q_a(q_text,card['card_text'])
-		        print(card)
-		        print(updated_card)
 		        combined_played_card.append(updated_card)
 
 		return render_template('player.html',
 								player = player,
 								player_hand = player_hand,
+								players_list = players_list,
 								turn_complete = turn_complete,
 								played_card = combined_played_card )
 
@@ -189,8 +217,6 @@ def player_player_id_declare_winner_winner_id(player_id,winner_id):
 
 	
 if __name__ == "__main__":
-	names = ['Federico','Sofia','Rosali','Alessandro']
-	num_cards_to_draw = 10
-	init_game(names,num_cards_to_draw)
+
 	#app.run(host = '192.168.137.1',port = 5000,debug = True)
-	app.run(debug = True)
+	app.run()

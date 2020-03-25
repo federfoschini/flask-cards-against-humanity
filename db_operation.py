@@ -1,21 +1,11 @@
 import psycopg2
 from random import sample
+
 import json
+import os
 
 def connect():
-    db = {
-    "host":"localhost",
-    "database":"cah",
-    "user":"postgres",
-    "port":5433,
-    "password":"nopwd"
-    }
-    conn = psycopg2.connect(
-    	host = db['host'],
-    	database = db['database'],
-    	user = db['user'],
-    	port = db['port'],
-    	password = db['password'],
+    conn = psycopg2.connect(os.getenv('DATABASE_URL')
     )
 
     return conn
@@ -49,9 +39,10 @@ def reset_player(cursor):
 
 def get_players_id_list(cursor):
     
-    query_player_list = "SELECT (setting_json) FROM setting where setting_name = 'players_id_list'"
+    query_player_list = "SELECT player_id  FROM player"
     cursor.execute(query_player_list)
-    players_id_list = cursor.fetchall()[0][0]
+    rows = cursor.fetchall()
+    players_id_list = [el[0] for el in rows]
     
     return players_id_list
 
@@ -101,3 +92,21 @@ def draw_card_id(cursor, card_type, num_cards_to_draw):
     cursor.execute(query,params)
 
     return card_id_drawn
+def init_zar(cursor,player_id):
+    query ="""UPDATE player
+                SET is_zar = true, has_played = true
+                where player_id =%s"""
+    params = (player_id,)
+    cursor.execute(query,params)
+
+
+    card_type = 'Q'
+    num_cards_to_draw = 1
+    card_id_drawn = draw_card_id(cursor, card_type, num_cards_to_draw)
+    query = """
+            INSERT INTO  played_card (player_id, card_id)
+            VALUES(%s,%s)
+            """
+    params = (player_id,card_id_drawn[0],)
+    cursor.execute(query,params)
+    

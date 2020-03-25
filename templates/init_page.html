@@ -1,0 +1,88 @@
+<html>
+<head>
+	<title style="color:white">THIS IS THE GAME</title>
+</head>
+<body>
+	<h1 style="color:white">Put players name</h1>
+
+	<form method="POST">
+		<input name="text">
+		<input type="submit">
+	</form>
+
+	<hr>
+	<table class="centered thick-border">
+        <tr>
+                <th>Player</th>
+                <th>Player_id</th>
+                <th>Zar</th>
+                <th>Has played</th>
+                <th>Score</th>
+                <th>Url</th>
+        </tr>
+        {% for player in players_list %}
+                <tr>
+                        <td>{{ player.player_id }}</td>
+                        <td>{{ player.name}}</td>
+                        <td>{{ player.is_zar}}</td>
+                        <td>{{ player.has_played}}</td>
+                        <td>{{ player.score}}</td>
+                        <td>player/{{ player.player_id}}</td>
+                </tr>
+        {% endfor %}
+	</table>
+</body>
+</html>
+
+<style type="text/css">
+	
+	body {
+		background-color: rgb(0, 0, 0);
+	}
+	p
+	{
+		color: rgb(255,255,255);
+	}
+	td
+	{
+		color: rgb(255,255,255);
+	}
+	tr
+	{
+		color: rgb(255,255,255);
+	}
+	/*
+	.btn {
+	  border: 2px solid black;
+	  background-color: white;
+	  color: black;
+	  padding: 14px 28px;
+	  padding-top: 14px;
+	  font-size: 16px;
+	  cursor: pointer;
+	}
+	*/
+
+	.btn {
+         background-color: white;
+         border: none;
+         color: black;
+         padding: 14px 28px;
+	  	padding-top: 14px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+         font-size: 20px;
+         margin: 4px 2px;
+         cursor: pointer;
+         }
+
+</style>
+
+<script type = "text/JavaScript">
+         <!--
+            function AutoRefresh( t ) {
+               setTimeout("location.reload(true);", t);
+            }
+         //-->
+</script>

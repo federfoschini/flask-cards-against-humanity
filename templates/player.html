@@ -3,6 +3,7 @@
         <title style="color:white">THIS IS THE GAME</title>
     </head>
     <body onload = "JavaScript:AutoRefresh(5000);">
+    	
         <h1 style="color:white">Hi, {{ player.name }}! </h1>
 
         {% if player.is_zar %}
@@ -75,10 +76,25 @@
         	{% endfor %}
 
         {% endif%}
-
-        
-        <hr>
-
+     <table class="centered thick-border">
+        <tr>
+                <th>Player</th>
+                <th>Zar</th>
+                <th>Has played</th>
+                <th>Score</th>
+                
+        </tr>
+        {% for player in players_list %}
+                <tr>
+                        
+                        <td>{{ player.name}}</td>
+                        <td>{{ player.is_zar}}</td>
+                        <td>{{ player.has_played}}</td>
+                        <td>{{ player.score}}</td>
+                       
+                </tr>
+        {% endfor %}
+	</table>
         
     </body>
 </html>
@@ -89,6 +105,14 @@
 		background-color: rgb(0, 0, 0);
 	}
 	p
+	{
+		color: rgb(255,255,255);
+	}
+	tr
+	{
+		color: rgb(255,255,255);
+	}
+	td
 	{
 		color: rgb(255,255,255);
 	}

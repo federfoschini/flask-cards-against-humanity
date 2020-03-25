@@ -10,7 +10,7 @@ from db_operation import get_current_zar
 from db_operation import update_zar
 from db_operation import draw_card_id
 import json
-
+import uuid
 def play_answer_card(cursor,player_id,card_id):
     
     params = (player_id,card_id)
@@ -28,13 +28,6 @@ def play_answer_card(cursor,player_id,card_id):
     cursor.execute(query_insert,params)
     cursor.execute(query_delete,params)
     return None
-
-## draw cards method
-
-##get id not drawn
-
-card_type = 'A'
-num_cards_to_draw = 10
 
 def init_player(cursor,player_id,name,card_id_drawn):
     query = """
@@ -55,7 +48,7 @@ def init_zar(cursor,player_id):
 
 
 	card_type = 'Q'
-	num_card_to_draw = 1
+	num_cards_to_draw = 1
 	card_id_drawn = draw_card_id(cursor, card_type, num_cards_to_draw)
 	query = """
 	        INSERT INTO  played_card (player_id, card_id)
@@ -101,7 +94,7 @@ def init_setting(players_id_list):
 
 		cursor.execute(query_upload,params)
 
-def init_game(names,num_cards_to_draw):
+def init_game(names,num_cards_to_draw=10):
 	
 	reset_deck()
 	
@@ -118,11 +111,12 @@ def init_game(names,num_cards_to_draw):
 		card_type = 'A'
 		zar_initialized = False
 		for i,name in zip(players_id_list,names):
+			player_id = str(uuid.uuid4())
 			card_id_drawn = draw_card_id(cursor, card_type, num_cards_to_draw)
-			init_player(cursor,str(i),name,card_id_drawn)
+			init_player(cursor,player_id,name,card_id_drawn)
 
 			if zar_initialized == False:
-				init_zar(cursor,i)
+				init_zar(cursor,player_id)
 				zar_initialized = True
 
 		#init played_card
