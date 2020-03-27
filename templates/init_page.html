@@ -27,7 +27,7 @@
                         <td>{{ player.is_zar}}</td>
                         <td>{{ player.has_played}}</td>
                         <td>{{ player.score}}</td>
-                        <td>player/{{ player.player_id}}</td>
+                        <td>{{ request.host_url}}player/{{player.player_id}}</td>
                 </tr>
         {% endfor %}
 	</table>

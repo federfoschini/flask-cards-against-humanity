@@ -57,6 +57,11 @@ sql_create_played_card_table =  """ CREATE TABLE IF NOT EXISTS played_card (
                         )
                     """
 
+sql_create_setting_table =  """ CREATE TABLE IF NOT EXISTS setting (
+                        setting_name text not null,
+                        setting_json json not null
+                        )
+                    """
 with connect() as conn, conn.cursor() as cursor:
     cursor.execute(sql_create_card_table)
 print('finished sql_create_card_table')
@@ -72,3 +77,6 @@ with connect() as conn, conn.cursor() as cursor:
 with connect() as conn, conn.cursor() as cursor:
     cursor.execute(sql_create_played_card_table)
     print('finished sql_create_played_card_table')
+with connect() as conn, conn.cursor() as cursor:
+    cursor.execute(sql_create_setting_table)
+    print('finished sql_create_setting_table')
