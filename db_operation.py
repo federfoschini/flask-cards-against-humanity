@@ -5,8 +5,7 @@ import json
 import os
 
 def connect():
-    conn = psycopg2.connect(os.getenv('DATABASE_URL')
-    )
+    conn = psycopg2.connect(os.getenv('DATABASE_URL'))
 
     return conn
 
@@ -39,10 +38,9 @@ def reset_player(cursor):
 
 def get_players_id_list(cursor):
     
-    query_player_list = "SELECT player_id  FROM player"
-    cursor.execute(query_player_list)
-    rows = cursor.fetchall()
-    players_id_list = [el[0] for el in rows]
+    query = "SELECT setting_json FROM setting WHERE setting_name = 'players_id_list'"
+    cursor.execute(query)
+    players_id_list = cursor.fetchall()[0][0]
     
     return players_id_list
 

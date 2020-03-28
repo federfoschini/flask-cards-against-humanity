@@ -97,9 +97,6 @@ def init_setting(players_id_list):
 def init_game(names,num_cards_to_draw=10):
 	
 	reset_deck()
-	
-	players_id_list = [str(i) for i in range(len(names))]
-	init_setting(players_id_list)
 
 	with connect() as conn, conn.cursor() as cursor:
 		query = """
@@ -110,7 +107,8 @@ def init_game(names,num_cards_to_draw=10):
 		cursor.execute(query)
 		card_type = 'A'
 		zar_initialized = False
-		for i,name in zip(players_id_list,names):
+		players_id_list = []
+		for name in names:
 			player_id = str(uuid.uuid4())
 			card_id_drawn = draw_card_id(cursor, card_type, num_cards_to_draw)
 			init_player(cursor,player_id,name,card_id_drawn)
@@ -118,7 +116,9 @@ def init_game(names,num_cards_to_draw=10):
 			if zar_initialized == False:
 				init_zar(cursor,player_id)
 				zar_initialized = True
+			players_id_list.append(player_id)
 
+		init_setting(players_id_list)
 		#init played_card
 
 def get_player(cursor, player_id):
