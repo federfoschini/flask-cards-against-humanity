@@ -5,7 +5,7 @@ import json
 import os
 
 def connect():
-    conn = psycopg2.connect(os.getenv('DATABASE_URL'))
+    conn = psycopg2.connect(os.environ.get('DATABASE_URL'))
 
     return conn
 

@@ -1,10 +1,14 @@
 <html>
     <head>
+    	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <title style="color:white">THIS IS THE GAME</title>
     </head>
     <body onload = "JavaScript:AutoRefresh(5000);">
     	
-        <h1 style="color:white">Hi, {{ player.name }}! </h1>
+    	<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <h1 style="color:white">Hi, {{ player.name }}! </h1>
 
         {% if player.is_zar %}
         	<p>You are the zar, wait for the other to play</p>
@@ -37,10 +41,9 @@
 	    	
         {% endfor %}
 		{% endif %}
-
-       
-        <hr>
-        {% if turn_complete %}
+    </div>
+    <div class="col-sm">
+            {% if turn_complete %}
         	<p>Everybody played. Card on the table. </p>
         	{% if player.is_zar %}
 				<p>ZAR click on the winner</p>
@@ -53,7 +56,6 @@
         	{% endfor %}
 
 			{% else %}
-				<p>{{player.is_zar}}</p>
 				{% for card in played_card%}
 			        <div>
 			        	<a href = "{{request.url}}" class="btn" >
@@ -76,7 +78,9 @@
         	{% endfor %}
 
         {% endif%}
-     <table class="centered thick-border">
+    </div>
+    <div class="col-sm">
+      <table class="centered thick-border">
         <tr>
                 <th>Player</th>
                 <th>Zar</th>
@@ -95,6 +99,15 @@
                 </tr>
         {% endfor %}
 	</table>
+    </div>
+  </div>
+</div>
+        
+
+       
+        <hr>
+
+     
         
     </body>
 </html>
